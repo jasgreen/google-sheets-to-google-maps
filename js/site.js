@@ -26,7 +26,7 @@ function initialiseMap() {
 
       // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
       var mapOptions = {
-        zoom: 10,
+        zoom: 7,
         center: new google.maps.LatLng(51.9194, 19.1451)
       };
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
