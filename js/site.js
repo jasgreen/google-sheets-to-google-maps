@@ -3,8 +3,10 @@ var locations = [];
 
 function initialiseMap() {
   $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1-BT1dAzjt--Z9e62jK6P-duZZC_MdVuwhJo8QIihL-Y/values/Town%20Master!B2:X?key=AIzaSyAMjGnUY0SonztgIaWqRBdeOWfM0Fx1CVY", function(data) {
+      var i = 2;
     	$(data.values).each(function() {
     		var location = {};
+				location.id = i;
 				location.title = this[0];
 				location.alternativeName = this[2];
 				location.researchArea = this[19];
@@ -16,6 +18,8 @@ function initialiseMap() {
         location.areaCoordinator = this[18] || '';
         location.townLeader = this[22] || '';
         locations.push(location);
+
+        i++;
     	});
 
       var mapStyle = [
@@ -124,6 +128,7 @@ function createMarker(map, location, infowindow) {
   });
   google.maps.event.addListener(marker, 'click', function() {
     infowindow.setContent('<div>'+
+    '<p><strong>Row #' + location.id + '</strong>'+
     '<p><strong>Primary Town Name</strong><br/> ' + location.title + '</p>' +
     '<p><strong>Research Area</strong><br/> ' + location.researchArea + '</p>' +
     '<p></p>' +
