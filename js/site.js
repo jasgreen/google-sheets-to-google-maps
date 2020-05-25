@@ -1,25 +1,87 @@
+// 0: "Primary Town Name (Plain Text)"
+// 1: "Primary Town Name (Diacritical)"
+// 2: "Alternate Names"
+// 3: "Legacy Name"
+// 4: "USBGN"
+// 5: "Latitude"
+// 6: "Longitude"
+// 7: "Lat #"
+// 8: "Lon #"
+// 9: "Existing Region"
+// 10: "Region Vlookup based on N"
+// 11: "KL Conflict"
+// 12: "Existing Subregion"
+// 13: "Subregion Vlookup based on U SUBREGION IS NO LONGER BASED ON RESEARCH AREA"
+// 14: "N-O Conflict"
+// 15: "Review Region/Subregion"
+// 16: "Gubernia / Kingdom/ Prussian Provinz 1907"
+// 17: "Uyezd-District (Congress Poland) / County (Galicia) / 1907"
+// 18: "Area Coordinator Autofill based on Q"
+// 19: "Research Area"
+// 20: "Area Coordinator 1 discrepencies from P"
+// 21: "Area Coordinator  2  (auto fill)"
+// 22: "Town Leader 1"
+
 var map;
 var locations = [];
+var columns = {};
 
 function initialiseMap() {
   $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1-BT1dAzjt--Z9e62jK6P-duZZC_MdVuwhJo8QIihL-Y/values/Town%20Master!B2:X?key=AIzaSyAMjGnUY0SonztgIaWqRBdeOWfM0Fx1CVY", function(data) {
-      var i = 2;
-    	$(data.values).each(function() {
-    		var location = {};
-				location.id = i;
-				location.title = this[0];
-				location.alternativeName = this[2];
-				location.researchArea = this[19];
-				location.legacyName = this[3];
-				location.subregion = this[12];
-				location.region = this[10];
-				location.latitude = parseFloat(this[7]);
-        location.longitude = parseFloat(this[8]);
-        location.areaCoordinator = this[18] || '';
-        location.townLeader = this[22] || '';
-        locations.push(location);
-
-        i++;
+    	$(data.values).each(function(i) {
+        if(i === 0){
+          this.forEach(function(column, colIndex) {
+            switch (column) {
+              case 'Primary Town Name (Plain Text)':
+                columns.title = colIndex;
+                break;
+              case 'Alternate Names':
+                columns.alternativeName = colIndex;
+                break;
+              case 'Research Area':
+                columns.researchArea = colIndex;
+                break;
+              case 'Legacy Name':
+                columns.legacyName = colIndex;
+                break;
+              case 'Existing Subregion':
+                columns.subregion = colIndex;
+                break;
+              case 'Existing Region':
+                columns.region = colIndex;
+                break;
+              case 'Lat #':
+                columns.latitude = colIndex;
+                break;
+              case 'Lon #':
+                columns.longitude = colIndex;
+                break;
+              case 'Area Coordinator 1 discrepencies from P':
+                columns.areaCoordinator = colIndex;
+                break;
+              case 'Town Leader 1':
+                columns.townLeader = colIndex;
+                break;
+              default:
+                break;
+            }
+          });
+          // console.log(columns);
+        } else {
+      		var location = {};
+  				location.id = i+1; // add one to normalize zero-index array
+  				location.title = this[columns.title];
+  				location.alternativeName = this[columns.alternativeName];
+  				location.researchArea = this[columns.researchArea];
+  				location.legacyName = this[columns.legacyName];
+  				location.subregion = this[columns.subregion];
+  				location.region = this[columns.region];
+  				location.latitude = parseFloat(this[columns.latitude]);
+          location.longitude = parseFloat(this[columns.longitude]);
+          location.areaCoordinator = this[columns.areaCoordinator] || '';
+          location.townLeader = this[columns.townLeader] || '';
+          locations.push(location);
+        }
     	});
 
       var mapStyle = [
