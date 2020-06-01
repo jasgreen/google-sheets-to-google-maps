@@ -47,7 +47,7 @@ function initialiseMap() {
               case 'Existing Subregion':
                 columns.subregion = colIndex;
                 break;
-              case 'Existing Region':
+              case 'Region Vlookup based on N':
                 columns.region = colIndex;
                 break;
               case 'Lat #':
@@ -56,7 +56,7 @@ function initialiseMap() {
               case 'Lon #':
                 columns.longitude = colIndex;
                 break;
-              case 'Area Coordinator 1 discrepencies from P':
+              case 'Area Coordinator Autofill based on Research Area':
                 columns.areaCoordinator = colIndex;
                 break;
               case 'Town Leader 1':
