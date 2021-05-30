@@ -182,9 +182,9 @@ function createMarker(map, location, infowindow) {
 
   marker.setIcon({
       path: google.maps.SymbolPath.CIRCLE,
-      fillColor:stringToColour(location.researchArea.replace(/aeiou/i, '')),
+      fillColor:stringToColour("ZZ" + location.researchArea.replace(/aeiou/i, '')),
       fillOpacity: 1,
-      strokeColor: 'white',
+      strokeColor: stringToColour("AA" + location.researchArea.replace(/aeiou/i, '')),
       strokeWeight: 1,
       scale: 7
   });
